@@ -6,8 +6,13 @@ Follow-up: Can you come up with an algorithm that is less than O(n2) time comple
 '''
 
 #NestedLoop O(N^2):
+'''- brute force approach
+- check every pair of numbers to see if they add up to the target
+- time complexity: O(N^2)
+- space complexity: O(1)
+'''
 
-def twoSum(nums, target):
+def twoSumNL(nums, target):
     for i in range(len(nums)):
         for j in range(i+1, len(nums)):
             if nums[i] + nums[j] == target:
@@ -17,11 +22,15 @@ def twoSum(nums, target):
 
 #Two Pointers O(NlogN): 
 '''
+- sort the array and use two pointers to find the target sum
 - original indices gets lost!! 
 - need to store them in a tuple and sort based on the value
+- time complexity: O(NlogN) due to sorting
+- space complexity: O(N) due to storing the original indices in a new array
+- Best for sorted arrays aas there time complexity is O(N) and space complexity is O(1)
 '''
 
-def twoSum(nums, target):
+def twoSumTP(nums, target):
     arr = [(num, i) for i, num in enumerate(nums)]
     arr.sort()
     
@@ -41,8 +50,14 @@ def twoSum(nums, target):
 
 
 #HashMap O(N):
+'''
+- use a hash map to store the numbers and their indices
+- for each number, check if the complement (target - current number) exists in the hash
+- time complexity: O(N) due to single pass through the array
+- space complexity: O(N) due to storing the numbers in the hash map
+'''
 
-def twoSum(nums, target):
+def twoSumHM(nums, target):
     num_map = {}
     for i, num in enumerate(nums):
         complement = target - num
