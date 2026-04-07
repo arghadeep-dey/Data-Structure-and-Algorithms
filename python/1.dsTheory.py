@@ -286,8 +286,85 @@ arr2 = np.insert(arr2, 1, 4)  # Output: array([1, 4, 3, 4, 5, 6]) (inserts an el
 print(arr2)  # Output: array([1, 4, 3, 4, 5, 6]) (prints the array)
 arr3 = arr2[1:3]  # Output: array([4, 3]) (slices the array from index 1 to index 3)
 print(np.where(arr2 == 4))  # Output: (array([1, 3]),) (returns the indices of all occurrences of 4 in the array)
-arr2 = np.flip(arr2)  # Output: array([6, 5, 4, 3, 4, 1]) (reverses the array)  
+arr2 = np.flip(arr2)  # Output: array([6, 5, 4, 3, 4, 1]) (reverses the array)
 
 #********************************************************************************************
+#FUN BEGINS HERE
+
+#Linked List
+'''
+A linked list is a linear data structure where each element (called a node) contains a value and a reference (or link) to the next node in the sequence.
+In Python, we can define a linked list using a class for the nodes and a class for the linked list itself.
+'''
+
+#Creating a Node class and a LinkedList class
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, val):
+        new_node = ListNode(val)
+        if not self.head:
+            self.head = new_node
+            return
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+        last_node.next = new_node
+
+    def print_list(self):
+        current_node = self.head
+        while current_node:
+            print(current_node.val)  # Output: prints the value of each node in the linked list
+            current_node = current_node.next
+
+#Creating a linked list and appending values
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+linked_list.print_list()  # Output: 1 2 3 (each value on a new line)
+#Structure of linkedlist node: (1,index of 2) -> (2,index of 3) -> (3,None)
+
+#Removing a node from the linked list
+def remove_node(linked_list, val):
+    current_node = linked_list.head
+    prev_node = None
+
+    while current_node:
+        if current_node.val == val:
+            if prev_node:
+                prev_node.next = current_node.next  # Bypass the current node
+            else:
+                linked_list.head = current_node.next  # Update head if the node to remove is the head
+            return
+        prev_node = current_node
+        current_node = current_node.next
+remove_node(linked_list, 2)
+linked_list.print_list()  # Output: 1 3 (each value on a new line)
+#Before removal: (1,index of 2) -> (2,index of 3) -> (3,None)
+#After removal: (1,index of 3) -> (3,None)
+
+#Removing a node from the linked list without access to the head
+def remove_node_no_head(node):
+    if node is None or node.next is None:
+        return  # Cannot remove the node if it's the last node or if it's None
+
+    next_node = node.next
+    node.val = next_node.val  # Copy the value of the next node to the current node
+    node.next = next_node.next  # Bypass the next node
+#Example usage:
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+# Before removal: (1,index of 2) -> (2,index of 3) -> (3,None)
+remove_node_no_head(linked_list.head.next)  # Removing the node with value 2
+linked_list.print_list()  # Output: 1 3 (each value on a new line)
+# After removal: (1,index of 3) -> (3,None)
 
 
