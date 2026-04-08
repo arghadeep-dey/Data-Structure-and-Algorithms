@@ -367,4 +367,50 @@ remove_node_no_head(linked_list.head.next)  # Removing the node with value 2
 linked_list.print_list()  # Output: 1 3 (each value on a new line)
 # After removal: (1,index of 3) -> (3,None)
 
+#Linked List Reversal
+def reverse_linked_list(linked_list):
+    prev_node = None
+    current_node = linked_list.head
+
+    while current_node:
+        next_node = current_node.next  # Store the next node
+        current_node.next = prev_node  # Reverse the link
+        prev_node = current_node  # Move prev_node to the current node
+        current_node = next_node  # Move to the next node
+
+    linked_list.head = prev_node  # Update the head of the linked list to the new first node
+#Example usage:
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+# Before reversal: (1,index of 2) -> (2,index of 3) -> (3,None)
+reverse_linked_list(linked_list)
+linked_list.print_list()  # Output: 3 2 1 (each value on a new line)
+# After reversal: (3,index of 2) -> (2,index of 1) -> (1,None)
+
+#Linked List Cycle Detection
+def has_cycle(linked_list):
+    slow = linked_list.head
+    fast = linked_list.head
+
+    while fast and fast.next:
+        slow = slow.next  # Move slow pointer by 1 step
+        fast = fast.next.next  # Move fast pointer by 2 steps
+
+        if slow == fast:  # A cycle is detected
+            return True
+
+    return False  # No cycle detected
+#Example usage:
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+# Creating a cycle for testing
+linked_list.head.next.next.next = linked_list.head  # Creates a cycle: (1,index of 2) -> (2,index of 3) -> (3,index of 1)   
+print(has_cycle(linked_list))  # Output: True (a cycle is detected)
+
+
+
 

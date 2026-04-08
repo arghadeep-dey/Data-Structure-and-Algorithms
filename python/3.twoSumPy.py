@@ -19,6 +19,13 @@ def twoSumNL(nums, target):
                 return [i, j]
     return []
 
+#Example usage:
+'''
+nums = [2, 7, 11, 15]
+target = 9
+For loop 1: i = 0, j = 1, nums[0] + nums[1] = 2 + 7 = 9 == target, so we return [0, 1]
+'''
+
 
 #Two Pointers O(NlogN): 
 '''
@@ -48,6 +55,18 @@ def twoSumTP(nums, target):
     
     return []
 
+#Example usage:
+'''
+nums = [2, 7, 11, 15]
+target = 9
+arr = [(2, 0), (7, 1), (11, 2), (15, 3)]
+left = 0, right = 3
+curr_sum = 2 + 15 = 17 > target, so right -= 1
+left = 0, right = 2
+curr_sum = 2 + 11 = 13 > target, so right -= 1
+left = 0, right = 1
+curr_sum = 2 + 7 = 9 == target, so we return [arr[left][1], arr[right][1]] which is [0, 1]
+'''
 
 #HashMap O(N):
 '''
@@ -65,3 +84,13 @@ def twoSumHM(nums, target):
             return [num_map[complement], i]
         num_map[num] = i
     return []
+
+#Example usage:
+'''
+nums = [2, 7, 11, 15]
+target = 9
+For loop 1: i = 0, num = 2, complement = 7
+- complement 7 is not in num_map, so we add 2 to num_map with index 0: num_map = {2: 0}
+For loop 2: i = 1, num = 7, complement = 2
+- complement 2 is in num_map, so we return [num_map[2], 1] which is [0, 1]
+'''
