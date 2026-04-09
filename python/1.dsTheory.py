@@ -411,6 +411,91 @@ linked_list.append(3)
 linked_list.head.next.next.next = linked_list.head  # Creates a cycle: (1,index of 2) -> (2,index of 3) -> (3,index of 1)   
 print(has_cycle(linked_list))  # Output: True (a cycle is detected)
 
+#Finding the middle of a linked list
+def find_middle(linked_list):
+    slow = linked_list.head
+    fast = linked_list.head
+
+    while fast and fast.next:
+        slow = slow.next  # Move slow pointer by 1 step
+        fast = fast.next.next  # Move fast pointer by 2 steps
+
+    return slow.val if slow else None  # Return the value of the middle node
+#Example usage:
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+linked_list.append(4)
+linked_list.append(5)
+print(find_middle(linked_list))  # Output: 3 (the middle node has the value 3)  
+
+#Finding the nth node from the end of a linked list
+def find_nth_from_end(linked_list, n):
+    slow = linked_list.head
+    fast = linked_list.head
+
+    for _ in range(n):
+        if fast is None:
+            return None  # n is greater than the length of the linked list
+        fast = fast.next  # Move fast pointer by n steps
+
+    while fast:
+        slow = slow.next  # Move slow pointer by 1 step
+        fast = fast.next  # Move fast pointer by 1 step
+
+    return slow.val if slow else None  # Return the value of the nth node from the end
+#Example usage:
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+linked_list.append(4)
+linked_list.append(5)
+print(find_nth_from_end(linked_list, 2))  # Output: 4 (the 2nd node from the end has the value 4)   
+
+#Finding the intersection of two linked lists
+def find_intersection(linked_list1, linked_list2):
+    def get_length(linked_list):
+        length = 0
+        current_node = linked_list.head
+        while current_node:
+            length += 1
+            current_node = current_node.next
+        return length
+
+    len1 = get_length(linked_list1)
+    len2 = get_length(linked_list2)
+
+    # Align the start of both linked lists
+    if len1 > len2:
+        for _ in range(len1 - len2):
+            linked_list1.head = linked_list1.head.next
+    else:
+        for _ in range(len2 - len1):
+            linked_list2.head = linked_list2.head.next
+
+    # Traverse both linked lists together to find the intersection
+    while linked_list1.head and linked_list2.head:
+        if linked_list1.head == linked_list2.head:
+            return linked_list1.head.val  # Return the value of the intersection node
+        linked_list1.head = linked_list1.head.next
+        linked_list2.head = linked_list2.head.next
+
+    return None  # No intersection found
+#Example usage:
+linked_list1 = LinkedList()
+linked_list2 = LinkedList()
+linked_list1.append(1)
+linked_list1.append(2)
+linked_list1.append(3)
+linked_list2.append(4)
+linked_list2.append(5)
+# Creating an intersection for testing
+linked_list2.head.next.next = linked_list1.head.next  # Creates an intersection at node
+print(find_intersection(linked_list1, linked_list2))  # Output: 2 (the intersection node has the value 2)
+
+
 
 
 
