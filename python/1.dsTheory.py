@@ -495,6 +495,68 @@ linked_list2.append(5)
 linked_list2.head.next.next = linked_list1.head.next  # Creates an intersection at node
 print(find_intersection(linked_list1, linked_list2))  # Output: 2 (the intersection node has the value 2)
 
+#Finding the start of a cycle in a linked list
+def find_cycle_start(linked_list):
+    slow = linked_list.head
+    fast = linked_list.head
+
+    # First, detect if a cycle exists
+    while fast and fast.next:
+        slow = slow.next  # Move slow pointer by 1 step
+        fast = fast.next.next  # Move fast pointer by 2 steps
+
+        if slow == fast:  # A cycle is detected
+            break
+    else:
+        return None  # No cycle detected
+
+    # Find the start of the cycle
+    slow = linked_list.head  # Move slow pointer to the head
+    while slow != fast:
+        slow = slow.next  # Move slow pointer by 1 step
+        fast = fast.next  # Move fast pointer by 1 step
+
+    return slow.val  # Return the value of the start node of the cycle
+#Example usage:
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+# Creating a cycle for testing
+linked_list.head.next.next.next = linked_list.head.next  # Creates a cycle: (1,index of 2) -> (2,index of 3) -> (3,index of 2)   
+print(find_cycle_start(linked_list))  # Output: 2 (the start of the cycle has the value 2)  
+
+#Finding the length of a cycle in a linked list
+def find_cycle_length(linked_list): 
+    slow = linked_list.head
+    fast = linked_list.head
+
+    # First, detect if a cycle exists
+    while fast and fast.next:
+        slow = slow.next  # Move slow pointer by 1 step
+        fast = fast.next.next  # Move fast pointer by 2 steps
+
+        if slow == fast:  # A cycle is detected
+            break
+    else:
+        return 0  # No cycle detected
+
+    # Calculate the length of the cycle
+    cycle_length = 1
+    current_node = slow.next
+    while current_node != slow:
+        current_node = current_node.next
+        cycle_length += 1
+
+    return cycle_length  # Return the length of the cycle
+#Example usage:
+linked_list = LinkedList()
+linked_list.append(1)
+linked_list.append(2)
+linked_list.append(3)
+# Creating a cycle for testing
+linked_list.head.next.next.next = linked_list.head.next  # Creates a cycle: (1,index of 2) -> (2,index of 3) -> (3,index of 2)   
+print(find_cycle_length(linked_list))  # Output: 2 (the length of the cycle is 2, as it includes nodes with values 2 and 3) 
 
 
 
