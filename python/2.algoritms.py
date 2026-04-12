@@ -36,3 +36,25 @@ def jump_search(arr, target):
         if arr[i] == target:
             return i
     return -1
+
+# 4. Interpolation Search (requires sorted array)
+def interpolation_search(arr, target):
+    low, high = 0, len(arr) - 1
+    while low <= high and target >= arr[low] and target <= arr[high]:
+        if low == high:
+            if arr[low] == target:
+                return low
+            return -1
+        
+        pos = low + ((high - low) // (arr[high] - arr[low]) * (target - arr[low]))
+
+        if pos < low or pos > high:
+            return -1
+
+        if arr[pos] == target:
+            return pos
+        elif arr[pos] < target:
+            low = pos + 1
+        else:
+            high = pos - 1
+    return -1
