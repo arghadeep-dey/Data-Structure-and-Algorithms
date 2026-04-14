@@ -556,7 +556,249 @@ linked_list.append(2)
 linked_list.append(3)
 # Creating a cycle for testing
 linked_list.head.next.next.next = linked_list.head.next  # Creates a cycle: (1,index of 2) -> (2,index of 3) -> (3,index of 2)   
-print(find_cycle_length(linked_list))  # Output: 2 (the length of the cycle is 2, as it includes nodes with values 2 and 3) 
+print(find_cycle_length(linked_list))  # Output: 2 (the length of the cycle is 2, as it includes nodes with values 2 and 3)
+
+#Finding the intersection of two linked lists with cycles
+def find_intersection_with_cycles(linked_list1, linked_list2):
+    def get_cycle_start(linked_list):
+        slow = linked_list.head
+        fast = linked_list.head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
+                break
+        else:
+            return None
+
+        slow = linked_list.head
+        while slow != fast:
+            slow = slow.next
+            fast = fast.next
+
+        return slow
+
+    cycle_start1 = get_cycle_start(linked_list1)
+    cycle_start2 = get_cycle_start(linked_list2)
+
+    if not cycle_start1 and not cycle_start2:
+        # Both linked lists do not have cycles, use the previous method to find intersection
+        return find_intersection(linked_list1, linked_list2)
+
+    if (cycle_start1 and not cycle_start2) or (not cycle_start1 and cycle_start2):
+        # One linked list has a cycle and the other does not, they cannot intersect
+        return None
+
+    # Both linked lists have cycles, check if they are the same cycle
+    current_node = cycle_start1
+    while True:
+        if current_node == cycle_start2:
+            return current_node.val  # Return the value of the intersection node in the cycle
+        current_node = current_node.next
+        if current_node == cycle_start1:
+            break
+
+    return None  # No intersection found in the cycles
+#Example usage:
+linked_list1 = LinkedList()
+linked_list2 = LinkedList()
+linked_list1.append(1)
+linked_list1.append(2)
+linked_list1.append(3)
+linked_list2.append(4)
+linked_list2.append(5)
+# Creating cycles for testing
+linked_list1.head.next.next.next = linked_list1.head.next  # Creates a cycle in linked_list1: (1,index of 2) -> (2,index of 3) ->   (3,index of 2)
+linked_list2.head.next.next = linked_list1.head.next  # Creates an intersection at node with value 2 in linked_list2: (4,index of 5) -> (5,index of 2) -> (2,index of 3) -> (3,index of 2)  
+print(find_intersection_with_cycles(linked_list1, linked_list2))  # Output: 2 (the intersection node in the cycle has the value 2)
+
+#Finding the intersection of two linked lists with cycles using a hash set
+def find_intersection_with_cycles_hash(linked_list1, linked_list2):
+    def get_cycle_start(linked_list):
+        slow = linked_list.head
+        fast = linked_list.head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
+                break
+        else:
+            return None
+
+        slow = linked_list.head
+        while slow != fast:
+            slow = slow.next
+            fast = fast.next
+
+        return slow
+
+    cycle_start1 = get_cycle_start(linked_list1)
+    cycle_start2 = get_cycle_start(linked_list2)
+
+    if not cycle_start1 and not cycle_start2:
+        # Both linked lists do not have cycles, use the previous method to find intersection
+        return find_intersection(linked_list1, linked_list2)
+
+    if (cycle_start1 and not cycle_start2) or (not cycle_start1 and cycle_start2):
+        # One linked list has a cycle and the other does not, they cannot intersect
+        return None
+
+    # Both linked lists have cycles, use a hash set to find the intersection
+    visited_nodes = set()
+    current_node = cycle_start1
+    while True:
+        visited_nodes.add(current_node)
+        current_node = current_node.next
+        if current_node == cycle_start1:
+            break
+
+    current_node = cycle_start2
+    while True:
+        if current_node in visited_nodes:
+            return current_node.val  # Return the value of the intersection node in the cycle
+        current_node = current_node.next
+        if current_node == cycle_start2:
+            break
+
+    return None  # No intersection found in the cycles
+#Example usage:
+linked_list1 = LinkedList()
+linked_list2 = LinkedList()
+linked_list1.append(1)
+linked_list1.append(2)
+linked_list1.append(3)
+linked_list2.append(4)
+linked_list2.append(5)
+# Creating cycles for testing
+linked_list1.head.next.next.next = linked_list1.head.next  # Creates a cycle in linked_list1: (1,index of 2) -> (2,index of 3) -> (3,index of 2)
+linked_list2.head.next.next = linked_list1.head.next  # Creates an intersection at node with value 2 in linked_list2: (4,index of 5) -> (5,index of 2) -> (2,index of 3) -> (3,index of 2)  
+print(find_intersection_with_cycles_hash(linked_list1, linked_list2))  # Output: 2 (the intersection node in the cycle has the value 2)
+
+#Finding the intersection of two linked lists with cycles using a hash set and without modifying the input linked lists
+def find_intersection_with_cycles_hash_no_modify(linked_list1, linked_list2):
+    def get_cycle_start(linked_list):
+        slow = linked_list.head
+        fast = linked_list.head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
+                break
+        else:
+            return None
+
+        slow = linked_list.head
+        while slow != fast:
+            slow = slow.next
+            fast = fast.next
+
+        return slow
+
+    cycle_start1 = get_cycle_start(linked_list1)
+    cycle_start2 = get_cycle_start(linked_list2)
+
+    if not cycle_start1 and not cycle_start2:
+        # Both linked lists do not have cycles, use the previous method to find intersection
+        return find_intersection(linked_list1, linked_list2)
+
+    if (cycle_start1 and not cycle_start2) or (not cycle_start1 and cycle_start2):
+        # One linked list has a cycle and the other does not, they cannot intersect
+        return None
+
+    # Both linked lists have cycles, use a hash set to find the intersection without modifying the input linked lists
+    visited_nodes = set()
+    current_node = cycle_start1
+    while True:
+        visited_nodes.add(current_node)
+        current_node = current_node.next
+        if current_node == cycle_start1:
+            break
+
+    current_node = cycle_start2
+    while True:
+        if current_node in visited_nodes:
+            return current_node.val  # Return the value of the intersection node in the cycle
+        current_node = current_node.next
+        if current_node == cycle_start2:
+            break
+
+    return None  # No intersection found in the cycles
+#Example usage:
+linked_list1 = LinkedList()
+linked_list2 = LinkedList()
+linked_list1.append(1)
+linked_list1.append(2)
+linked_list1.append(3)
+linked_list2.append(4)
+linked_list2.append(5)
+# Creating cycles for testing
+linked_list1.head.next.next.next = linked_list1.head.next  # Creates a cycle in linked_list1: (1,index of 2) -> (2,index of 3) -> (3,index of 2)
+linked_list2.head.next.next = linked_list1.head.next  # Creates an intersection at node with value 2 in linked_list2: (4,index of 5) -> (5,index of 2) -> (2,index of 3) -> (3,index of 2)  
+print(find_intersection_with_cycles_hash_no_modify(linked_list1, linked_list2))  # Output: 2 (the intersection node in the cycle has the value 2)
+
+#Finding the intersection of two linked lists with cycles using a hash set and without modifying the input linked lists and without using extra space
+def find_intersection_with_cycles_no_extra_space(linked_list1, linked_list2):   
+    def get_cycle_start(linked_list):
+        slow = linked_list.head
+        fast = linked_list.head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
+                break
+        else:
+            return None
+
+        slow = linked_list.head
+        while slow != fast:
+            slow = slow.next
+            fast = fast.next
+
+        return slow
+
+    cycle_start1 = get_cycle_start(linked_list1)
+    cycle_start2 = get_cycle_start(linked_list2)
+
+    if not cycle_start1 and not cycle_start2:
+        # Both linked lists do not have cycles, use the previous method to find intersection
+        return find_intersection(linked_list1, linked_list2)
+
+    if (cycle_start1 and not cycle_start2) or (not cycle_start1 and cycle_start2):
+        # One linked list has a cycle and the other does not, they cannot intersect
+        return None
+
+    # Both linked lists have cycles, check if they are the same cycle without using extra space
+    current_node = cycle_start1
+    while True:
+        if current_node == cycle_start2:
+            return current_node.val  # Return the value of the intersection node in the cycle
+        current_node = current_node.next
+        if current_node == cycle_start1:
+            break
+
+    return None  # No intersection found in the cycles
+#Example usage:
+linked_list1 = LinkedList()
+linked_list2 = LinkedList()
+linked_list1.append(1)
+linked_list1.append(2)
+linked_list1.append(3)
+linked_list2.append(4)
+linked_list2.append(5)
+# Creating cycles for testing
+linked_list1.head.next.next.next = linked_list1.head.next  # Creates a cycle in linked_list1: (1,index of 2) -> (2,index of 3) -> (3,index of 2)
+linked_list2.head.next.next = linked_list1.head.next  # Creates an intersection at node with value 2 in linked_list2: (4,index of 5) -> (5,index of 2) -> (2,index of 3) -> (3,index of 2)  
+print(find_intersection_with_cycles_no_extra_space(linked_list1, linked_list2))  # Output: 2 (the intersection node in the cycle has the value 2)   
+
+
 
 
 
