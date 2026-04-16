@@ -58,3 +58,15 @@ def interpolation_search(arr, target):
         else:
             high = pos - 1
     return -1
+
+# 5. Exponential Search (requires sorted array)
+def exponential_search(arr, target):
+    if arr[0] == target:
+        return 0
+
+    i = 1
+    while i < len(arr) and arr[i] <= target:
+        i *= 2
+
+    # Binary search in the range [i/2, min(i, len(arr)-1)]
+    return binary_search(arr[i // 2:min(i, len(arr))], target) + i // 2
