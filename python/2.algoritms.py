@@ -70,3 +70,15 @@ def exponential_search(arr, target):
 
     # Binary search in the range [i/2, min(i, len(arr)-1)]
     return binary_search(arr[i // 2:min(i, len(arr))], target) + i // 2
+
+# Sorting Algorithms
+#1. Bubble Sort
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if arr[j] > arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+    return arr
+
+
