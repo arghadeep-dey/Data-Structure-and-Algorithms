@@ -214,3 +214,23 @@ def radix_sort(arr):
         counting_sort_for_radix(arr, exp)
         exp *= 10
     return arr
+
+# 9. Bucket Sort (for uniformly distributed data)
+def bucket_sort(arr):
+    if len(arr) == 0:
+        return arr
+
+    max_val = max(arr)
+    min_val = min(arr)
+    bucket_count = len(arr)
+    buckets = [[] for _ in range(bucket_count)]
+
+    for num in arr:
+        index = int((num - min_val) / (max_val - min_val + 1) * bucket_count)
+        buckets[index].append(num)
+
+    sorted_arr = []
+    for bucket in buckets:
+        sorted_arr.extend(sorted(bucket))
+    return sorted_arr
+
