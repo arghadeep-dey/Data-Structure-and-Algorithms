@@ -249,3 +249,58 @@ def shell_sort(arr):
             arr[j] = temp
         gap //= 2
     return arr
+
+# 11. Tim Sort (Python's built-in sorting algorithm)
+def tim_sort(arr):
+    return sorted(arr)
+
+# Tree Traversal Algorithms
+# 1. Tree Creation
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None  
+def insert(root, value):
+    if root is None:
+        return TreeNode(value)
+    if value < root.value:
+        root.left = insert(root.left, value)
+    else:
+        root.right = insert(root.right, value)
+    return root
+
+# 2. In-order Traversal
+def in_order_traversal(root):
+    if root:
+        in_order_traversal(root.left)
+        print(root.value, end=' ')
+        in_order_traversal(root.right)
+
+# 3. Pre-order Traversal
+def pre_order_traversal(root):
+    if root:
+        print(root.value, end=' ')
+        pre_order_traversal(root.left)
+        pre_order_traversal(root.right)
+
+# 4. Post-order Traversal
+def post_order_traversal(root):
+    if root:
+        post_order_traversal(root.left)
+        post_order_traversal(root.right)
+        print(root.value, end=' ')
+
+# 5. Level-order Traversal
+from collections import deque
+def level_order_traversal(root):
+    if root is None:
+        return
+    queue = deque([root])
+    while queue:
+        node = queue.popleft()
+        print(node.value, end=' ')
+        if node.left:
+            queue.append(node.left)
+        if node.right:
+            queue.append(node.right)
