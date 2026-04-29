@@ -304,3 +304,96 @@ def level_order_traversal(root):
             queue.append(node.left)
         if node.right:
             queue.append(node.right)
+
+# 6. Depth-First Search (DFS)
+def dfs(root):
+    if root:
+        print(root.value, end=' ')
+        dfs(root.left)
+        dfs(root.right)
+
+# 7. Breadth-First Search (BFS)
+def bfs(root):
+    if root is None:
+        return
+    queue = deque([root])
+    while queue:
+        node = queue.popleft()
+        print(node.value, end=' ')
+        if node.left:
+            queue.append(node.left)
+        if node.right:
+            queue.append(node.right)
+
+# 8. Binary Search Tree (BST) Operations
+def search_bst(root, target):
+    if root is None or root.value == target:
+        return root
+    if target < root.value:
+        return search_bst(root.left, target)
+    return search_bst(root.right, target)
+
+def delete_bst(root, target):
+    if root is None:
+        return root
+    if target < root.value:
+        root.left = delete_bst(root.left, target)
+    elif target > root.value:
+        root.right = delete_bst(root.right, target)
+    else:
+        if root.left is None:
+            return root.right
+        elif root.right is None:
+            return root.left
+        temp = min_value_node(root.right)
+        root.value = temp.value
+        root.right = delete_bst(root.right, temp.value)
+    return root
+
+def min_value_node(node):
+    current = node
+    while current.left is not None:
+        current = current.left
+    return current
+
+# 9. Balanced Tree Check
+def is_balanced(root):
+    def check_balance(node):
+        if node is None:
+            return 0
+        left_height = check_balance(node.left)
+        if left_height == -1:
+            return -1
+        right_height = check_balance(node.right)
+        if right_height == -1:
+            return -1
+        if abs(left_height - right_height) > 1:
+            return -1
+        return max(left_height, right_height) + 1
+
+    return check_balance(root) != -1
+
+# 10. Lowest Common Ancestor (LCA) in BST
+def lca_bst(root, n1, n2):
+    while root:
+        if root.value > n1 and root.value > n2:
+            root = root.left
+        elif root.value < n1 and root.value < n2:
+            root = root.right
+        else:
+            return root
+    return None
+
+# 11. Lowest Common Ancestor (LCA) in Binary Tree
+def lca_binary_tree(root, n1, n2):
+    if root is None:
+        return None
+    if root.value == n1 or root.value == n2:
+        return root
+
+    left_lca = lca_binary_tree(root.left, n1, n2)
+    right_lca = lca_binary_tree(root.right, n1, n2)
+
+    if left_lca and right_lca:
+        return root
+    return left_lca if left_lca else right_lca
