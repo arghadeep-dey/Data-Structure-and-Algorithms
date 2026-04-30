@@ -397,3 +397,202 @@ def lca_binary_tree(root, n1, n2):
     if left_lca and right_lca:
         return root
     return left_lca if left_lca else right_lca
+
+# Map Searching Algorithms
+# 1. Hash Map Search
+def hash_map_search(hash_map, key):
+    return hash_map.get(key, None)
+
+# 2. Trie Search
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end_of_word = False
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.is_end_of_word = True
+
+    def search(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+        return node.is_end_of_word
+
+# 3. Graph Search (DFS and BFS)
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        if v not in self.graph:
+            self.graph[v] = []
+        self.graph[u].append(v)
+        self.graph[v].append(u)
+
+    def dfs(self, start, visited=None):
+        if visited is None:
+            visited = set()
+        visited.add(start)
+        print(start, end=' ')
+        for neighbor in self.graph.get(start, []):
+            if neighbor not in visited:
+                self.dfs(neighbor, visited)
+
+    def bfs(self, start):
+        visited = set()
+        queue = deque([start])
+        while queue:
+            node = queue.popleft()
+            if node not in visited:
+                print(node, end=' ')
+                visited.add(node)
+                queue.extend(self.graph.get(node, []))
+
+# 4. A* Search Algorithm
+import heapq
+def a_star_search(graph, start, goal, heuristic):
+    open_set = []
+    heapq.heappush(open_set, (0 + heuristic[start], start))
+    came_from = {}
+    g_score = {start: 0}
+
+    while open_set:
+        current = heapq.heappop(open_set)[1]
+        if current == goal:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start)
+            return path[::-1]
+
+        for neighbor in graph.get(current, []):
+            tentative_g_score = g_score[current] + 1
+            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                f_score = tentative_g_score + heuristic[neighbor]
+                heapq.heappush(open_set, (f_score, neighbor))
+    return None
+
+# 5. Dijkstra's Algorithm
+def dijkstra(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    priority_queue = [(0, start)]
+
+    while priority_queue:
+        current_distance, current_node = heapq.heappop(priority_queue)
+
+        if current_distance > distances[current_node]:
+            continue
+
+        for neighbor, weight in graph[current_node].items():
+            distance = current_distance + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(priority_queue, (distance, neighbor))
+
+    return distances
+
+# 6. Bellman-Ford Algorithm
+def bellman_ford(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+
+    for _ in range(len(graph) - 1):
+        for node in graph:
+            for neighbor, weight in graph[node].items():
+                if distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+
+    # Check for negative-weight cycles
+    for node in graph:
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                raise ValueError("Graph contains a negative-weight cycle")
+
+    return distances
+
+# 7. Floyd-Warshall Algorithm
+def floyd_warshall(graph):
+    nodes = list(graph.keys())
+    distances = {node: {neighbor: float('inf') for neighbor in nodes} for node in nodes}
+
+    for node in nodes:
+        distances[node][node] = 0
+        for neighbor, weight in graph[node].items():
+            distances[node][neighbor] = weight
+
+    for k in nodes:
+        for i in nodes:
+            for j in nodes:
+                if distances[i][j] > distances[i][k] + distances[k][j]:
+                    distances[i][j] = distances[i][k] + distances[k][j]
+
+    return distances
+
+# 8. Prim's Algorithm
+def prim_mst(graph):
+    mst = []
+    visited = set()
+    min_heap = [(0, next(iter(graph)))]  # Start with an arbitrary node
+
+    while min_heap:
+        weight, node = heapq.heappop(min_heap)
+        if node not in visited:
+            visited.add(node)
+            mst.append((weight, node))
+            for neighbor, edge_weight in graph[node].items():
+                if neighbor not in visited:
+                    heapq.heappush(min_heap, (edge_weight, neighbor))
+
+    return mst
+
+# 9. Kruskal's Algorithm
+def kruskal_mst(graph):
+    edges = []
+    for node in graph:
+        for neighbor, weight in graph[node].items():
+            edges.append((weight, node, neighbor))
+    edges.sort()
+
+    parent = {node: node for node in graph}
+    rank = {node: 0 for node in graph}
+
+    def find(node):
+        if parent[node] != node:
+            parent[node] = find(parent[node])
+        return parent[node]
+
+    def union(node1, node2):
+        root1 = find(node1)
+        root2 = find(node2)
+        if root1 != root2:
+            if rank[root1] > rank[root2]:
+                parent[root2] = root1
+            elif rank[root1] < rank[root2]:
+                parent[root1] = root2
+            else:
+                parent[root2] = root1
+                rank[root1] += 1
+
+    mst = []
+    for weight, node1, node2 in edges:
+        if find(node1) != find(node2):
+            union(node1, node2)
+            mst.append((weight, node1, node2))
+
+    return mst
