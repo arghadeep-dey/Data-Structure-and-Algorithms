@@ -615,3 +615,44 @@ def topological_sort(graph):
 
     return stack[::-1]  # Return reversed stack as topological order
 
+# 11. Tarjan's Algorithm for Strongly Connected Components
+def tarjan_scc(graph):
+    index = 0
+    stack = []
+    lowlink = {}
+    index_map = {}
+    on_stack = set()
+    sccs = []
+
+    def strongconnect(node):
+        nonlocal index
+        index_map[node] = index
+        lowlink[node] = index
+        index += 1
+        stack.append(node)
+        on_stack.add(node)
+
+        for neighbor in graph.get(node, []):
+            if neighbor not in index_map:
+                strongconnect(neighbor)
+                lowlink[node] = min(lowlink[node], lowlink[neighbor])
+            elif neighbor in on_stack:
+                lowlink[node] = min(lowlink[node], index_map[neighbor])
+
+        if lowlink[node] == index_map[node]:
+            scc = []
+            while True:
+                w = stack.pop()
+                on_stack.remove(w)
+                scc.append(w)
+                if w == node:
+                    break
+            sccs.append(scc)
+
+    for node in graph:
+        if node not in index_map:
+            strongconnect(node)
+
+    return sccs
+
+
