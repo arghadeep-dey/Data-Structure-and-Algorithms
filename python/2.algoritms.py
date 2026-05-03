@@ -655,4 +655,41 @@ def tarjan_scc(graph):
 
     return sccs
 
+# 12. Kosaraju's Algorithm for Strongly Connected Components
+def kosaraju_scc(graph):
+    visited = set()
+    stack = []
+
+    def fill_order(node):
+        visited.add(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                fill_order(neighbor)
+        stack.append(node)
+
+    for node in graph:
+        if node not in visited:
+            fill_order(node)
+
+    transposed_graph = {}
+    for node in graph:
+        for neighbor in graph[node]:
+            if neighbor not in transposed_graph:
+                transposed_graph[neighbor] = []
+            transposed_graph[neighbor].append(node)
+    visited.clear()
+    sccs = []
+    def dfs(node, scc):
+        visited.add(node)
+        scc.append(node)
+        for neighbor in transposed_graph.get(node, []):
+            if neighbor not in visited:
+                dfs(neighbor, scc)
+    while stack:
+        node = stack.pop()
+        if node not in visited:
+            scc = []
+            dfs(node, scc)
+            sccs.append(scc)
+    return sccs
 
